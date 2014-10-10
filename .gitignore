@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ##ignore dictionary
 loc5.txt
 ## ignore .settings folder
@@ -53,3 +54,17 @@ nbproject
 .project
 .settings
 composer.lock
+=======
+*.class
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+>>>>>>> d69cc841499f77d4dbb8139935e7c491d52005e8
