@@ -1,36 +1,49 @@
 package ro.zbranca.cuvinte;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Scanner;
+import java.util.Set;
 
 public class Cuvinte {
 
-	public static void main(String[] args) {	
-		Dictionary dictionary = new Dictionary();
-		String dictionaryFilePath = "loc5.txt";
-		HashMap<String,ArrayList<String>> indexedDictionary = dictionary.loadDictionaryFromFile(dictionaryFilePath);
 
-		//String word = new String("aerisit");
-		Scanner sc = new Scanner(System.in);
-		System.out.println("'x' for close scanner");
-		String word = "";
-		while (!word.equalsIgnoreCase("x")){
-		System.out.println("Enter some letters, then hit Enter : ");
-		word = sc.nextLine();
-		String sortedword = dictionary.sortLetters(word);
-		if(indexedDictionary.containsKey(sortedword.toLowerCase())){ //used lowercase to make the words case sensitive
-			System.out.println("anagrams from Dictionary   :  " + indexedDictionary.get(sortedword));
-			System.out.println("");
-		} else {
-			System.out.println("No anagrams in dictionary");
-		}
-		}
-		System.out.println("By");
-		sc.close();
-		System.exit(0);
+	public static void main(String[] args) {
+
+		//load dictionary
+		String dictionaryFilePath = "loc5.txt";
+		Dictionary.loadDictionaryFromFile(dictionaryFilePath);
+
+		String lettersOnRack = new String("redecorare");
+		Set<String> allAnagrams = Dictionary.getAllAnagrams(lettersOnRack);
+		
+
+		ArrayList<String> scrabbleCurrentTable = new ArrayList<String>();
+
+		//                        012345678901234
+		scrabbleCurrentTable.add("               "); //0
+		scrabbleCurrentTable.add("               "); //1
+		scrabbleCurrentTable.add("          o    "); //2
+		scrabbleCurrentTable.add("         ti    "); //3
+		scrabbleCurrentTable.add("         i     "); //4
+		scrabbleCurrentTable.add("         n     "); //5      //LETTERS NOW ON THE BOARD
+		scrabbleCurrentTable.add("       c t     "); //6
+		scrabbleCurrentTable.add("       a i     "); //7
+		scrabbleCurrentTable.add("    scapat     "); //8
+		scrabbleCurrentTable.add("       a       "); //9
+		scrabbleCurrentTable.add("       t       "); //10
+		scrabbleCurrentTable.add("       a       "); //11
+		scrabbleCurrentTable.add("      ai       "); //12
+		scrabbleCurrentTable.add("      r        "); //13
+		scrabbleCurrentTable.add("               "); //14 
+		//                        012345678901234
+
+		//        HashMap <String, Integer> letterStock = new HashMap<String, Integer>();
+		//        letterStock.put("a" ,1);
+		//		String letterList		= "abcdefghijklmnopqrstuvwxyz";
+		//		String letterValueList	= "19121899190141120111180909";
+
+		
+			System.out.println(allAnagrams.size() + " anagrams from Dictionary   :  " + allAnagrams);
+		
 
 	}
-
-
 }
