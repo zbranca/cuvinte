@@ -66,12 +66,18 @@ public class Dictionary {
 	// print all subsets of the remaining elements, with given prefix 
 	private static void combinations(String prefix, String s) {
 		if (s.length() > 0) {
-			if( indexedDictionary.containsKey(prefix + s.charAt(0))){
-				allAnagrams.addAll(indexedDictionary.get(prefix + s.charAt(0)));
+			String partialCombination = prefix + s.charAt(0);
+			if( length(partialCombination)>1 && indexedDictionary.containsKey(partialCombination)){
+				allAnagrams.addAll(indexedDictionary.get(partialCombination))		;
 			}
 			combinations(prefix + s.charAt(0), s.substring(1));
 			combinations(prefix,               s.substring(1));
 		}
+	}
+
+	private static int length(String partialCombination) {
+		// TODO Auto-generated method stub
+		return 0;
 	} 
 
 }
