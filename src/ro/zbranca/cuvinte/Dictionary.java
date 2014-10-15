@@ -13,7 +13,7 @@ public class Dictionary {
 	public static HashMap<String,ArrayList<String>> indexedDictionary;
 	public static Set<String> allAnagrams = new TreeSet<String>();
 
-	//	load dictionary from file and fill hashMap 
+	//	load dictionary from given file and fill hashMap 
 	public static void loadDictionaryFromFile (String filePath) {
 
 		indexedDictionary =new HashMap<String, ArrayList<String>>();
@@ -44,15 +44,15 @@ public class Dictionary {
 		System.out.println("We have " + numOfkeys + " keys in Dictionary");
 	}
 
-	public static Set<String> getAllAnagrams (String lettersOnRack){
+	public static Set<String> getAllAnagrams (String lettersOnRack, int minLength, int maxLength){
 		allAnagrams.clear();
-		combinations(sortLetters(lettersOnRack));
+		combinations(sortLetters(lettersOnRack), minLength, maxLength);
 		return allAnagrams;
 	}
 
 
-	//	sort letters alphabetically in a string, for key of Map
-	//	and to search Map by same form of key
+	//	sort letters alphabetically in a string
+	// for serch or add key in indexedDictionary
 	public static String sortLetters (String word) { 
 		char[] c = word.toCharArray();		//Convert to array of chars 
 		java.util.Arrays.sort(c);			//Sort
@@ -61,23 +61,21 @@ public class Dictionary {
 	}
 
 	// print all subsets of the characters in s
-	public static void combinations(String s) { combinations("", s); }
+	public static void combinations(String s, int minLength, int maxLength) { combinations("", s, minLength, maxLength); }
 
 	// print all subsets of the remaining elements, with given prefix 
-	private static void combinations(String prefix, String s) {
+	private static void combinations(String prefix, String s, int minLength, int maxLength) {
 		if (s.length() > 0) {
 			String partialCombination = prefix + s.charAt(0);
-			if( length(partialCombination)>1 && indexedDictionary.containsKey(partialCombination)){
+			if( partialCombination.length() >= minLength
+					&& partialCombination.length() <= maxLength
+					&& indexedDictionary.containsKey(partialCombination))
+			{
 				allAnagrams.addAll(indexedDictionary.get(partialCombination))		;
 			}
-			combinations(prefix + s.charAt(0), s.substring(1));
-			combinations(prefix,               s.substring(1));
+			combinations(prefix + s.charAt(0), s.substring(1), minLength, maxLength);
+			combinations(prefix,               s.substring(1), minLength, maxLength);
 		}
 	}
-
-	private static int length(String partialCombination) {
-		// TODO Auto-generated method stub
-		return 0;
-	} 
 
 }
