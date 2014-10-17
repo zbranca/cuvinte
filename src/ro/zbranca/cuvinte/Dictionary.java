@@ -14,7 +14,7 @@ public class Dictionary {
 	public static Set<String> allAnagrams = new TreeSet<String>();
 
 	//	load dictionary from given file and fill hashMap 
-	public static void loadDictionaryFromFile (String filePath) {
+	public void loadDictionaryFromFile (String filePath) {
 
 		indexedDictionary =new HashMap<String, ArrayList<String>>();
 		String lineFromTextDictionary;
@@ -52,7 +52,7 @@ public class Dictionary {
 
 
 	//	sort letters alphabetically in a string
-	// for serch or add key in indexedDictionary
+	// for search or add key in indexedDictionary
 	public static String sortLetters (String word) { 
 		char[] c = word.toCharArray();		//Convert to array of chars 
 		java.util.Arrays.sort(c);			//Sort
@@ -60,10 +60,11 @@ public class Dictionary {
 		return newString;
 	}
 
-	// print all subsets of the characters in s
+	// loader for combinations algorithm
 	public static void combinations(String s, int minLength, int maxLength) { combinations("", s, minLength, maxLength); }
 
-	// print all subsets of the remaining elements, with given prefix 
+	// combination algorithm, give all unique combinations of given letters
+	// filtered by desired length
 	private static void combinations(String prefix, String s, int minLength, int maxLength) {
 		if (s.length() > 0) {
 			String partialCombination = prefix + s.charAt(0);
@@ -78,4 +79,52 @@ public class Dictionary {
 		}
 	}
 
+
+	// get single letters that fit in front or in back of words
+	// receive word to check and letters from rack
+	// first element of return string are left hooks
+	// and second element are right hooks
+	
+	// hooks in front of word
+	public String getHooksOnFront(String word, String rackLetters) {
+		String hooks ="";
+		for (int i = 0; i< rackLetters.length(); i++) {
+			Set<String> allHookAnagrams;
+			allHookAnagrams = getAllAnagrams(word+rackLetters.charAt(i),
+					word.length()+1,word.length()+1);
+			if (allHookAnagrams.contains(rackLetters.charAt(i) + word))
+				hooks=hooks+rackLetters.charAt(i);	
+			allHookAnagrams.clear();
+		}
+		return hooks;
+	}
+	
+	//hooks in back of word
+	public String getHooksOnBack(String word, String rackLetters) {
+		String hooks ="";
+		for (int i = 0; i< rackLetters.length(); i++) {
+			Set<String> allHookAnagrams;
+			allHookAnagrams = getAllAnagrams(word+rackLetters.charAt(i),
+					word.length()+1,word.length()+1);
+			if (allHookAnagrams.contains(word + rackLetters.charAt(i)))
+				hooks=hooks+rackLetters.charAt(i);
+			allHookAnagrams.clear();
+		}
+		return hooks;
+	}
+	
+	//hooks between 2 words
+	public String getHooksOnMiddle(String wordFirst, String wordSecond, String rackLetters) {
+		String hooks ="";
+		for (int i = 0; i< rackLetters.length(); i++) {
+			Set<String> allHookAnagrams;
+			allHookAnagrams = getAllAnagrams(wordFirst+wordSecond+rackLetters.charAt(i),
+					wordFirst.length()+wordSecond.length()+1
+					,wordFirst.length()+wordSecond.length()+1);
+			if (allHookAnagrams.contains(wordFirst + rackLetters.charAt(i)+wordSecond))
+				hooks=hooks+rackLetters.charAt(i);
+			allHookAnagrams.clear();
+		}
+		return hooks;
+	}
 }
