@@ -2,8 +2,6 @@ package ro.zbranca.cuvinte;
 
 import java.util.Set;
 
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 public class Cuvinte {
 
 	public static void main(String[] args) {
@@ -20,7 +18,7 @@ public class Cuvinte {
 		String dictionaryFilePath = "loc5.txt";
 		dictionary.loadDictionaryFromFile(dictionaryFilePath);
 
-		String lettersOnRack = "retrode";
+		String lettersOnRack = "abcdefgijklmopqrstretrode";
 		Set<String> allAnagrams = Dictionary.getAllAnagrams(lettersOnRack ,4,7);		
 		System.out.println(allAnagrams.size() + " anagrams from Dictionary   :  " + allAnagrams);
 
@@ -29,7 +27,7 @@ public class Cuvinte {
 		System.out.println(" x" + table.checkForAnchor(7, 15)+"y");
 
 		System.out.println(dictionary.getHooksOnMiddle("ca","tat", "atprerts").toString());
-		
+
 		System.out.println(table.getCellTemplate(12, 10, 7)[0].toString()+table.getCellTemplate(12, 10, 7)[1].toString());
 
 		//     	letterStock.put("a" ,1);
