@@ -1,6 +1,7 @@
 package ro.zbranca.cuvinte;
 
 import java.util.Set;
+import java.util.Arrays;
 
 public class Cuvinte {
 
@@ -9,31 +10,35 @@ public class Cuvinte {
 		cuvinte.go();
 	}
 
-	public void go(){
+	public void go() {
 
 		Table table = new Table();
 		Dictionary dictionary = new Dictionary();
 
-		//load dictionary
+		String letterList = "abcdefghijklmnopqrstuvwxyz";
+		String letterOnFirstStock = "abcdefghijlmnopqrstuvxz";
+		String letterOnCurrentStock = "ghijlmno";
+
+		// load dictionary
 		String dictionaryFilePath = "loc5.txt";
 		dictionary.loadDictionaryFromFile(dictionaryFilePath);
 
-		String lettersOnRack = "abcdefgijklmopqrstretrode";
-		Set<String> allAnagrams = Dictionary.getAllAnagrams(lettersOnRack ,4,7);		
-		System.out.println(allAnagrams.size() + " anagrams from Dictionary   :  " + allAnagrams);
+		// Searching can be global, on all positions of table with just letters
+		// from rack, or specific, adding constrains of position
+		String lettersOnRack = "retrode";
+		Set<String> allAnagrams = Dictionary
+				.getAllAnagrams(lettersOnRack, 4, 7);
+		System.out.println(allAnagrams.size() + " anagrams from Dictionary :"
+				+ allAnagrams);
 
 		table.loadCurrentTable();
-		System.out.println(" x" + table.getTableCellValue(7, 14)+"y");
-		System.out.println(" x" + table.checkForAnchor(7, 15)+"y");
 
-		System.out.println(dictionary.getHooksOnMiddle("ca","tat", "atprerts").toString());
+		String[] cellTemplatePrint = table.getCellTemplate(6, 8, 7);
+		for (int i = 0; i < cellTemplatePrint.length; i++) {
+			System.out.println(cellTemplatePrint[i]);
+		}
 
-		System.out.println(table.getCellTemplate(12, 10, 7)[0].toString()+table.getCellTemplate(12, 10, 7)[1].toString());
-
-		//     	letterStock.put("a" ,1);
-		//		String letterList		= "abcdefghijklmnopqrstuvwxyz";
-		//		String letterValueList	= "19121899190141120111180909";
-
+		// letterStock.put("a" ,1);
+		// String letterValueList = "19121899190141120111180909";
 	}
-
 }
