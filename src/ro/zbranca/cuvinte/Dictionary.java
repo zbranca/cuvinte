@@ -12,7 +12,7 @@ public class Dictionary {
 
 	// dictionary is loaded in a hash map one time for entire session
 	// every word is first sorted alphabetically, resulting the key,
-	// this key is added to map and as item is added the word. A key
+	// this key is added to map with word added as item. A key
 	// can have multiple items, representing anagrams for that key
 	public static HashMap<String, ArrayList<String>> indexedDictionary;
 
@@ -53,7 +53,7 @@ public class Dictionary {
 		int numOfkeys = indexedDictionary.size();
 		System.out.println("We have " + numOfkeys + " keys in Dictionary");
 	}
-	
+
 	// simple alphabetically sort of letters as a string
 	// for search anagrams or make key for indexedDictionary
 	public static String sortLetters(String word) {
@@ -62,20 +62,19 @@ public class Dictionary {
 		String newString = new String(c); // Convert back to String
 		return newString;
 	}
-	
-	
+
 	// Return all words from dictionary possible to form with letters
 	// from rack. Min and max of length of words for return is give.
 	// This method prepare a empty Set of strings to be filled with
 	// words extracted from dictionary.
-	public static Set<String> getAllAnagrams(String lettersOnRack,
+	// used for hooks
+	public Set<String> getAllAnagrams(String lettersOnRack,
 			int minLength, int maxLength) {
 		if (allAnagrams == null) {
 			allAnagrams = new TreeSet<String>();
 		}
 		allAnagrams.clear();
 		// launch combination algorithm with an empty prefix
-		System.out.println("search for " + lettersOnRack);
 		combination("", sortLetters(lettersOnRack), minLength, maxLength);
 		return allAnagrams;
 	}
@@ -100,13 +99,15 @@ public class Dictionary {
 	}
 
 	// the hook is a letter that can be put in front or at back
-	// of a word to make new legal word by adjacency
+	// of a word to make new legal word by adjacency. this methods
 	// receive word to check for hooks and letters from rack
 
 	// hooks in front of word
 	public String getHooksOnFront(String word, String rackLetters) {
 		String hooks = "";
 		for (int i = 0; i < rackLetters.length(); i++) {
+			if( hooks.contains("" + rackLetters.charAt(i)))
+				continue;
 			Set<String> allHookAnagrams;
 			allHookAnagrams = getAllAnagrams(word + rackLetters.charAt(i),
 					word.length() + 1, word.length() + 1);
@@ -121,6 +122,8 @@ public class Dictionary {
 	public String getHooksOnBack(String word, String rackLetters) {
 		String hooks = "";
 		for (int i = 0; i < rackLetters.length(); i++) {
+			if( hooks.contains("" + rackLetters.charAt(i)))
+				continue;
 			Set<String> allHookAnagrams;
 			allHookAnagrams = getAllAnagrams(word + rackLetters.charAt(i),
 					word.length() + 1, word.length() + 1);
@@ -134,8 +137,11 @@ public class Dictionary {
 	// hooks between 2 words
 	public String getHooksOnMiddle(String wordFirst, String wordSecond,
 			String rackLetters) {
+		
 		String hooks = "";
 		for (int i = 0; i < rackLetters.length(); i++) {
+			if( hooks.contains("" + rackLetters.charAt(i)))
+				continue;
 			Set<String> allHookAnagrams;
 			allHookAnagrams = getAllAnagrams(wordFirst + wordSecond
 					+ rackLetters.charAt(i),
@@ -148,4 +154,67 @@ public class Dictionary {
 		}
 		return hooks;
 	}
+
+	// search for anagrams from given cell template and rack letters
+	// keep valid anagrams in allCellAnagrams for return
+	public Set<String> getCellAnagrams(String lettersOnRack,
+			String[] template) {
+		
+		Set<String> allCellAnagrams = null;
+		int numberOfLetters = lettersOnRack.length();
+
+		// work cell template to replace words with letters in anchor position
+		String[] dictionaryCellTemplate = replaceHooksInTemplate(lettersOnRack, template);
+		
+		for (int i = 0; i< dictionaryCellTemplate.length; i++){
+			System.out.println(dictionaryCellTemplate[i]);
+		}
+
+		return allCellAnagrams;
+	}
+
+	// here replace anchor words with hook letters in cellTemplate
+	public String[] replaceHooksInTemplate(String lettersOnRack,
+			String[] cellTemplate) {
+
+		// anchor words begin with position 1 on template array
+		int position = 1;
+
+		// look at every letter in template
+		for (int y = 0; y < cellTemplate[0].length(); y++) {
+
+			// isolate one letter
+			
+			String templatePositionContent = "" + cellTemplate[0].charAt(y);
+
+			// test if it's anchor position
+
+			// if it's top anchor position
+			if (templatePositionContent.equals("<")) {
+				cellTemplate[position] = getHooksOnBack(
+						cellTemplate[position], lettersOnRack);
+				position++; // advance in array template position
+			}
+
+			// if it's bottom anchor position
+			if (templatePositionContent.equals(">")) {
+				cellTemplate[position] = getHooksOnFront(
+						cellTemplate[position], lettersOnRack);
+				position++; // advance in array template position
+			}
+
+			// if it's middle anchor position
+			if (templatePositionContent.equals("@")) {
+				String[] words = cellTemplate[position].split("@");
+				cellTemplate[position] = getHooksOnMiddle(words[0],
+						words[1], lettersOnRack);
+				position++; // advance in array template position
+			}
+
+			// if isn't anchor position, let it go
+		}
+
+		return cellTemplate;
+	}
+
 }
